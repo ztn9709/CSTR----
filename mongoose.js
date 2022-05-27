@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-mongoose.connect('mongodb://localhost/web_demo')
+mongoose.connect('mongodb://localhost/magnetic_topo')
 
 const materialSchema = new Schema({
   mid: {
