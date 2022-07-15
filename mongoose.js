@@ -20,6 +20,7 @@ const Material = mongoose.model('Material', materialSchema)
 
 async function getData() {
   let data = await Material.find().select('id formula soc_topo_class nsoc_topo_class').limit(3)
+  data = JSON.parse(data)
   let metaData = data.map(item => {
     let template = {
       type: 'BaseMetadata',
@@ -60,7 +61,7 @@ async function getData() {
       ]
     }
     template.resourceChineseName = item.formula + '材料的拓扑性质'
-    template.resourceName = 'The properties of topological material' + item.formula
+    template.resourceName = 'The properties of topological material ' + item.formula
     template.identifier = '32321.11.' + '000001.' + item.id + '.test'
     let url = 'http://materiae.iphy.ac.cn/materials/' + item.id
     template.urls = [url]
@@ -80,6 +81,7 @@ async function getData() {
     metadatas: metaData,
     prefix: '32321'
   }
+  console.log(result)
   // const p = path.join(__dirname, 'TopoCSTR.json')
   // fs.writeFileSync(p, JSON.stringify(result))
   //发送axios请求注册
