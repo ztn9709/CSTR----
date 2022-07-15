@@ -19,7 +19,7 @@ const materialSchema = new Schema({
 const Material = mongoose.model('Material', materialSchema)
 
 async function getData() {
-  let data = await Material.find().select('id formula')
+  let data = await Material.find().select('id formula soc_topo_class nsoc_topo_class').limit(3)
   let metaData = data.map(item => {
     let template = {
       type: 'BaseMetadata',
@@ -39,10 +39,10 @@ async function getData() {
       submitOrgPhone: '13811570964',
       submitOrgEmail: 'hmweng@iphy.ac.cn',
       registerOrganizationCN: '中国科学院凝聚态物质科学数据中心',
-      registerOrganizationEN: 'CAS Condensed Matter Science Data Center',
-      publicationDate: '2022-06-20',
+      registerOrganizationEN: 'Condensed Matter Physics Data Center,CAS',
+      publicationDate: '2022-07-01',
       shareChannel: '1',
-      shareRange: '01',
+      shareRange: '02',
       process: '网站提供链接',
       contributors: [
         {
@@ -58,48 +58,30 @@ async function getData() {
           contributionType: ''
         }
       ],
-      alternativeIdentifiers: [
-        {
-          identifierValue: '',
-          identifierType: ''
-        }
-      ],
       subjectClassifications: [
         {
           subjectName: ['140'],
           subjectNameStandard: '01',
-          keyWordsCN: [],
+          keyWordsCN: ['晶体结构', '拓扑分类', '对称性指标'],
           keyWordsEN: []
         }
-      ],
-      associationIdentifiers: [
-        {
-          identifierValue: '',
-          identifierType: '',
-          relationType: ''
-        }
-      ],
-      copyrights: [
-        {
-          copyrightDescription: '',
-          copyrightCertificateNumber: ''
-        }
-      ],
-      funders: [
-        {
-          funderName: '',
-          funderProjectName: '',
-          funderProjectNumber: ''
-        }
-      ],
-      labelingSuggestions: ''
+      ]
     }
     template.resourceChineseName = item.formula + '材料的拓扑性质'
-    template.resourceName = item.formula
+    template.resourceName = 'The properties of topological material' + item.formula
     template.identifier = '32321.11.' + '000001.' + item.id + '.test'
     let url = 'http://materiae.iphy.ac.cn/materials/' + item.id
     template.urls = [url]
-    template.descriptionCN = '来自晶体材料拓扑性质数据库,记录了' + item.formula + '的相关拓扑性质，包括该材料的晶体结构、拓扑分类、对称性指标、态密度、能带等。'
+    template.descriptionCN =
+      '晶体材料拓扑性质数据库记录了' +
+      item.formula +
+      '的相关拓扑性质，' +
+      '该材料的拓扑分类为' +
+      item.nsoc_topo_class +
+      '(Non-SOC)/' +
+      item.soc_topo_class +
+      '(SOC)。' +
+      '详情页面展示了该材料的晶体结构，包括空间群、晶格常数等以及可视化的三维原胞球棍模型，另外还有该材料的对称性指标、态密度、能带等计算信息。'
     return template
   })
   let result = {
