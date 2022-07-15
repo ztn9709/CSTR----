@@ -32,7 +32,12 @@ async function getData() {
       descriptionCN: '',
       descriptionEN: '',
       resourceType: '11',
-      creators: null,
+      creators: [
+        {
+          creatorNameCN: '中国科学院物理研究所',
+          creatorNameEN: ''
+        }
+      ],
       submitOrgName: '中国科学院凝聚态物质科学数据中心',
       submitOrgAddress: '北京市海淀区中关村南三街8号',
       submitOrgPostcode: '100190',
@@ -44,20 +49,7 @@ async function getData() {
       shareChannel: '1',
       shareRange: '02',
       process: '网站提供链接',
-      contributors: [
-        {
-          contributorNameCN: '',
-          contributorNameEN: '',
-          contributorType: '',
-          contributorIdentifier: '',
-          contributorIdentifierType: '',
-          contributorOrganizationCN: '',
-          contributorOrganizationEN: '',
-          contributorOrganizationIdentifier: '',
-          contributorOrganizationIdentifierType: '',
-          contributionType: ''
-        }
-      ],
+      contributors: null,
       subjectClassifications: [
         {
           subjectName: ['140'],
