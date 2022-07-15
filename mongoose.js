@@ -19,8 +19,8 @@ const materialSchema = new Schema({
 const Material = mongoose.model('Material', materialSchema)
 
 async function getData() {
-  let data = await Material.find().select('id formula soc_topo_class nsoc_topo_class').limit(3)
-  data = JSON.parse(data)
+  let data = await Material.find().select({ _id: 0, id: 1, formula: 1, soc_topo_class: 1, nsoc_topo_class: 1 }).limit(3)
+  console.log(data)
   let metaData = data.map(item => {
     let template = {
       type: 'BaseMetadata',
@@ -85,16 +85,16 @@ async function getData() {
   // const p = path.join(__dirname, 'TopoCSTR.json')
   // fs.writeFileSync(p, JSON.stringify(result))
   //发送axios请求注册
-  const res = await axios({
-    url: 'https://www.cstr.cn/openapi/v2/pid-cstr-service/cstr.batch.register',
-    method: 'post',
-    data: result,
-    headers: {
-      clientId: '202202111123',
-      secret: '7e3102752251a111b40ffea4e65480b3'
-    }
-  })
-  console.log(res)
+  // const res = await axios({
+  //   url: 'https://www.cstr.cn/openapi/v2/pid-cstr-service/cstr.batch.register',
+  //   method: 'post',
+  //   data: result,
+  //   headers: {
+  //     clientId: '202202111123',
+  //     secret: '7e3102752251a111b40ffea4e65480b3'
+  //   }
+  // })
+  // console.log(res)
 }
 getData()
 
