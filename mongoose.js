@@ -3,6 +3,7 @@ const Schema = mongoose.Schema
 const fs = require('fs')
 const path = require('path')
 const axios = require('axios')
+const { json } = require('express')
 
 mongoose.connect('mongodb://localhost/nonlinear')
 
@@ -19,7 +20,9 @@ const materialSchema = new Schema({
 const Material = mongoose.model('Material', materialSchema)
 
 async function getData() {
-  let data = await Material.find().select({ _id: 0, id: 1, formula: 1, soc_topo_class: 1, nsoc_topo_class: 1 }).limit(3)
+  let data = await Material.find().select({ _id: 0, id: 1, formula: 1, soc_topo_class: 1, nsoc_topo_class: 1 }).limit(3).lean()
+  data = new Set(data)
+  data = [...data]
   let metaData = data.map(item => {
     let template = {
       type: 'BaseMetadata',
@@ -59,15 +62,6 @@ async function getData() {
         }
       ]
     }
-    for (let key in item) {
-      if (key == 'soc_topo_class') {
-        item.socTopoClass = item[key]
-      }
-      if (key == 'nsoc_topo_class') {
-        item.nsocTopoClass = item[key]
-      }
-    }
-    console.log(item)
     template.resourceChineseName = item.formula + '材料的拓扑性质'
     template.resourceName = 'The properties of topological material ' + item.formula
     template.identifier = '32321.11.' + '000001.' + item.id + '.test'
@@ -78,9 +72,9 @@ async function getData() {
       item.formula +
       '的相关拓扑性质，' +
       '该材料的拓扑分类为' +
-      item.nsocTopoClass +
+      item.nsoc_topo_class +
       '(Non-SOC)/' +
-      item.socTopoClass +
+      item.soc_topo_class +
       '(SOC)。' +
       '详情页面展示了该材料的晶体结构，包括空间群、晶格常数等以及可视化的三维原胞球棍模型，另外还有该材料的对称性指标、态密度、能带等计算信息。'
     return template
